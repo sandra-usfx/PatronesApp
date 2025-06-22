@@ -1,0 +1,618 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  {% if error %}
+  <div class="alert alert-danger">{{error}}</div>
+  {% endif %}
+
+  <h2 class="text-center mb-4">Genera Patrones de Faldas a tu Medida</h2>
+
+  <!-- GALERÍA DE IMÁGENES -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-2 mb-3">
+              <img
+                src="{{ url_for('static', filename='public/skirt1.jpg') }}"
+                alt="Falda Recta"
+                class="img-fluid rounded"
+              />
+            </div>
+            <div class="col-md-2 mb-3">
+              <img
+                src="{{ url_for('static', filename='public/skirt2.jpg') }}"
+                alt="Falda con Volante"
+                class="img-fluid rounded"
+              />
+            </div>
+            <div class="col-md-2 mb-3">
+              <img
+                src="{{ url_for('static', filename='public/skirt3.jpg') }}"
+                alt="Falda con Bolsillo"
+                class="img-fluid rounded"
+              />
+            </div>
+            <div class="col-md-2 mb-3">
+              <img
+                src="{{ url_for('static', filename='public/skirt4.jpg') }}"
+                alt="Falda Campana"
+                class="img-fluid rounded"
+              />
+            </div>
+            <div class="col-md-2 mb-3">
+              <img
+                src="{{ url_for('static', filename='public/skirt5.jpg') }}"
+                alt="Falda Sirena"
+                class="img-fluid rounded"
+              />
+            </div>
+            <div class="col-md-2 mb-3">
+              <img
+                src="{{ url_for('static', filename='public/skirt6.jpg') }}"
+                alt="Falda Campana"
+                class="img-fluid rounded"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading modal -->
+  <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-3">Generando imagen con IA...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading modal para tallas -->
+  <div
+    class="modal fade"
+    id="loadingTallasModal"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Procesando...</span>
+          </div>
+          <p class="mt-3">Generando tallas...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- AGREGAR ESTE MODAL después del loadingTallasModal -->
+  <div
+    class="modal fade"
+    id="loadingPatternsModal"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Procesando...</span>
+          </div>
+          <p class="mt-3">Generando patrones PDF...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN DE ELECCIÓN DE DISEÑO -->
+  <div class="row mb-5">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="card-title mb-0">Elige tu diseño favorito</h3>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <button
+              id="design-recta"
+              class="btn btn-info"
+              onclick="generateImage('design', 'recta')"
+            >
+              Falda Recta
+            </button>
+            <button
+              id="design-con_volante"
+              class="btn btn-danger"
+              onclick="generateImage('design', 'con_volante')"
+            >
+              Falda con Volante en Dobladillo
+            </button>
+            <button
+              id="design-con_bolsillo"
+              class="btn btn-success"
+              onclick="generateImage('design', 'con_bolsillo')"
+            >
+              Falda con Bolsillo
+            </button>
+            <button
+              id="design-campana"
+              class="btn btn-warning"
+              onclick="generateImage('design', 'campana')"
+            >
+              Falda Campana
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN DE GENERACIÓN DE PATRONES -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-danger text-white">
+          <h3 class="card-title mb-0">Generar Patrones</h3>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <button
+              id="pattern-recta"
+              class="btn btn-info"
+              onclick="generateImage('pattern', 'recta')"
+            >
+              Falda Recta
+            </button>
+            <button
+              id="pattern-con_canesu"
+              class="btn btn-success"
+              onclick="generateImage('pattern', 'con_canesu')"
+            >
+              Falda con Canesú
+            </button>
+            <button
+              id="pattern-varios_disenos"
+              class="btn btn-warning"
+              onclick="generateImage('pattern', 'varios_disenos')"
+            >
+              Varios Diseños
+            </button>
+            <button
+              id="pattern-patrones_varios_disenos"
+              class="btn btn-secondary"
+              onclick="generateImage('pattern', 'patrones_varios_disenos')"
+            >
+              Patrones Varios Diseños
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR PARA MOSTRAR RESULTADO -->
+  <div id="result-container" class="row mt-5" style="display: none">
+    <div class="col-md-6 mx-auto">
+      <div class="card">
+        <div class="card-body text-center">
+          <img
+            id="generated-image"
+            src=""
+            alt="Imagen generada"
+            class="img-fluid rounded"
+          />
+        </div>
+        <div class="card-footer text-center">
+          <p class="mb-0">
+            <strong id="image-title">Imagen generada por IA</strong>
+          </p>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <button class="btn btn-secondary" onclick="hideResult()">
+          Nueva Generación
+        </button>
+        <button
+          id="download-btn"
+          class="btn btn-success"
+          onclick="downloadImage()"
+        >
+          Descargar
+        </button>
+        <button
+          id="sizes-btn"
+          class="btn btn-warning"
+          onclick="showSizes()"
+          style="display: none"
+        >
+          Mostrar Tallas
+        </button>
+        <button
+          id="patterns-btn"
+          class="btn btn-info"
+          onclick="showPatterns()"
+          style="display: none"
+        >
+          Mostrar Patrones
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR PARA MOSTRAR TALLAS -->
+  <div id="sizes-container" class="row mt-5" style="display: none">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-warning text-white">
+          <h3 class="card-title mb-0 text-center">Tallas Disponibles</h3>
+        </div>
+        <div class="card-body">
+          <div class="row" id="sizes-content">
+            <!-- Las imágenes de tallas se cargarán aquí dinámicamente -->
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          <button class="btn btn-secondary" onclick="hideSizes()">
+            Ocultar Tallas
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Agregar este contenedor después del sizes-container -->
+  <div id="patterns-container" class="row mt-5" style="display: none">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h3 class="card-title mb-0 text-center">
+            Patrones PDF Listos para Imprimir
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="row" id="patterns-content">
+            <!-- Los patrones PDF se cargarán aquí dinámicamente -->
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          <button class="btn btn-secondary" onclick="hidePatterns()">
+            Ocultar Patrones
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  console.log("Script de index.html cargado");
+  let currentImageUrl = null;
+  let currentImageType = null;
+  let currentSkirtType = null;
+  let currentFilename = null;
+
+  async function generateImage(modelType, skirtType) {
+    console.log(`Generando imagen: ${modelType} - ${skirtType}`);
+    try {
+      const loadingModal = new bootstrap.Modal(
+        document.getElementById("loadingModal")
+      );
+      loadingModal.show();
+
+      const requestData = {
+        model_type: modelType,
+        skirt_type: skirtType,
+      };
+
+      const response = await fetch(`/api/generate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error del servidor: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        currentImageUrl = data.image_url;
+        currentImageType = modelType;
+        currentSkirtType = skirtType;
+
+        // Extraer el nombre del archivo de la URL
+        const urlParts = data.image_url.split("/");
+        currentFilename = urlParts[urlParts.length - 1];
+
+        const imgElement = document.getElementById("generated-image");
+        imgElement.src = `data:image/png;base64,${data.image_base64}`;
+
+        const titleElement = document.getElementById("image-title");
+        const typeText = modelType === "design" ? "Diseño" : "Patrón";
+        const skirtText = skirtType
+          .replace("_", " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+        titleElement.textContent = `${typeText} generado: Falda ${skirtText}`;
+
+        // MOSTRAR BOTÓN DE TALLAS Y PATRONES SOLO PARA PATRONES
+        const sizesBtn = document.getElementById("sizes-btn");
+        const patternsBtn = document.getElementById("patterns-btn");
+        if (modelType === "pattern") {
+          sizesBtn.style.display = "inline-block";
+          patternsBtn.style.display = "inline-block";
+        } else {
+          sizesBtn.style.display = "none";
+          patternsBtn.style.display = "none";
+        }
+
+        document.getElementById("result-container").style.display = "block";
+        document
+          .getElementById("result-container")
+          .scrollIntoView({ behavior: "smooth" });
+      } else {
+        throw new Error(data.error || "Error desconocido");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert(`Error al generar imagen: ${error.message}`);
+    } finally {
+      const loadingModal = bootstrap.Modal.getInstance(
+        document.getElementById("loadingModal")
+      );
+      if (loadingModal) {
+        loadingModal.hide();
+      }
+    }
+  }
+
+  async function showSizes() {
+    if (!currentFilename) {
+      alert("No hay imagen para procesar");
+      return;
+    }
+
+    console.log(`Generando tallas para: ${currentFilename}`);
+
+    try {
+      const loadingModal = new bootstrap.Modal(
+        document.getElementById("loadingTallasModal")
+      );
+      loadingModal.show();
+
+      const response = await fetch(`/api/generate_sizes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          filename: currentFilename,
+          skirt_type: currentSkirtType,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error del servidor: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        const sizesContent = document.getElementById("sizes-content");
+        sizesContent.innerHTML = "";
+
+        // Crear las tres columnas con las imágenes
+        const sizes = [
+          {
+            image: data.size_s_base64,
+            caption: "Talla S: Contorno Cadera 92 cm",
+            filename: data.size_s_filename,
+          },
+          {
+            image: data.size_m_base64,
+            caption: "Talla M: Contorno Cadera 100 cm",
+            filename: data.size_m_filename,
+          },
+          {
+            image: data.size_l_base64,
+            caption: "Talla L: Contorno Cadera 108 cm",
+            filename: data.size_l_filename,
+          },
+        ];
+
+        sizes.forEach((size, index) => {
+          const colDiv = document.createElement("div");
+          colDiv.className = "col-md-4 mb-3";
+
+          colDiv.innerHTML = `
+            <div class="card">
+              <div class="card-body text-center">
+                <img src="data:image/png;base64,${size.image}" 
+                     alt="${size.caption}" 
+                     class="img-fluid rounded" 
+                     style="max-height: 300px; object-fit: contain;" />
+              </div>
+              <div class="card-footer text-center">
+                <p class="mb-2"><strong>${size.caption}</strong></p>
+                <button class="btn btn-sm btn-success" 
+                        onclick="downloadSizeImage('${size.filename}')">
+                  Descargar
+                </button>
+              </div>
+            </div>
+          `;
+
+          sizesContent.appendChild(colDiv);
+        });
+
+        document.getElementById("sizes-container").style.display = "block";
+        document
+          .getElementById("sizes-container")
+          .scrollIntoView({ behavior: "smooth" });
+      } else {
+        throw new Error(data.error || "Error desconocido");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert(`Error al generar tallas: ${error.message}`);
+    } finally {
+      const loadingModal = bootstrap.Modal.getInstance(
+        document.getElementById("loadingTallasModal")
+      );
+      if (loadingModal) {
+        loadingModal.hide();
+      }
+    }
+  }
+  async function showPatterns() {
+    if (!currentFilename) {
+      alert("No hay imagen para procesar");
+      return;
+    }
+
+    console.log(`Generando patrones PDF para: ${currentFilename}`);
+
+    try {
+      const loadingModal = new bootstrap.Modal(
+        document.getElementById("loadingPatternsModal")
+      );
+      loadingModal.show();
+
+      const response = await fetch(`/api/generate_patterns`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          filename: currentFilename,
+          skirt_type: currentSkirtType,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error del servidor: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        const patternsContent = document.getElementById("patterns-content");
+        patternsContent.innerHTML = "";
+
+        // Crear las tres columnas con los patrones
+        const patterns = [
+          {
+            preview: data.pattern_s_preview,
+            caption: "Patrón Talla S (92 cm)",
+            filename: data.pattern_s_filename,
+            size: "S",
+          },
+          {
+            preview: data.pattern_m_preview,
+            caption: "Patrón Talla M (100 cm)",
+            filename: data.pattern_m_filename,
+            size: "M",
+          },
+          {
+            preview: data.pattern_l_preview,
+            caption: "Patrón Talla L (108 cm)",
+            filename: data.pattern_l_filename,
+            size: "L",
+          },
+        ];
+
+        patterns.forEach((pattern, index) => {
+          const colDiv = document.createElement("div");
+          colDiv.className = "col-md-4 mb-3";
+
+          colDiv.innerHTML = `
+          <div class="card">
+            <div class="card-body text-center">
+              <img src="data:image/png;base64,${pattern.preview}" 
+                   alt="${pattern.caption}" 
+                   class="img-fluid rounded border" 
+                   style="max-height: 300px; object-fit: contain; background-color: #f8f9fa;" />
+            </div>
+            <div class="card-footer text-center">
+              <p class="mb-2"><strong>${pattern.caption}</strong></p>
+              <p class="text-muted small mb-3">Patrón escalado 20:1 - Listo para imprimir</p>
+              <button class="btn btn-sm btn-danger" 
+                      onclick="downloadPatternPDF('${pattern.filename}')">
+                <i class="fas fa-download"></i> Descargar PDF
+              </button>
+            </div>
+          </div>
+        `;
+
+          patternsContent.appendChild(colDiv);
+        });
+
+        document.getElementById("patterns-container").style.display = "block";
+        document
+          .getElementById("patterns-container")
+          .scrollIntoView({ behavior: "smooth" });
+      } else {
+        throw new Error(data.error || "Error desconocido");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert(`Error al generar patrones: ${error.message}`);
+    } finally {
+      const loadingModal = bootstrap.Modal.getInstance(
+        document.getElementById("loadingPatternsModal")
+      );
+      if (loadingModal) {
+        loadingModal.hide();
+      }
+    }
+  }
+
+  function hideResult() {
+    document.getElementById("result-container").style.display = "none";
+    document.getElementById("sizes-container").style.display = "none";
+    document.getElementById("patterns-container").style.display = "none";
+    currentImageUrl = null;
+    currentImageType = null;
+    currentSkirtType = null;
+    currentFilename = null;
+  }
+
+  function hideSizes() {
+    document.getElementById("sizes-container").style.display = "none";
+  }
+
+  function downloadImage() {
+    if (!currentImageUrl) {
+      alert("No hay imagen para descargar");
+      return;
+    }
+    window.location.href = currentImageUrl;
+  }
+
+  function downloadSizeImage(filename) {
+    if (!filename) {
+      alert("No hay imagen para descargar");
+      return;
+    }
+    window.location.href = `/tallas/${filename}`;
+  }
+  //MOSTRAR PATRONES
+  function hidePatterns() {
+    document.getElementById("patterns-container").style.display = "none";
+  }
+
+  function downloadPatternPDF(filename) {
+    if (!filename) {
+      alert("No hay patrón para descargar");
+      return;
+    }
+    window.location.href = `/patterns/${filename}`;
+  }
+</script>
+{% endblock %}

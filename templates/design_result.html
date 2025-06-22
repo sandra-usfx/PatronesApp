@@ -1,0 +1,35 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <h2 class="text-center mb-4">
+    Diseño Generado: Falda {{ skirt_type|replace('_', ' ')|title }}
+  </h2>
+
+  <div class="row">
+    <div class="col-md-6 mx-auto">
+      <div class="card">
+        <div class="card-body text-center">
+          <img
+            src="{{ image_path }}"
+            alt="Diseño de Falda {{ skirt_type|replace('_', ' ')|title }}"
+            class="img-fluid rounded"
+          />
+        </div>
+        <div class="card-footer text-center">
+          <p class="mb-0"><strong>Diseño generado por IA</strong></p>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="{{ url_for('routes.index') }}" class="btn btn-secondary"
+          >Volver a la página principal</a
+        >
+        <a
+          href="{{ url_for('routes.generate_pattern', skirt_type=skirt_type) }}"
+          class="btn btn-primary"
+          >Generar Patrón para este Diseño</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
