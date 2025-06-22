@@ -32,7 +32,7 @@ PATTERN_MODELS = {
 
 def load_model(model_type, skirt_type):
     noise_scheduler = DDPMScheduler(
-        num_train_timesteps=10,
+        num_train_timesteps=1000,
         beta_schedule="linear",
         prediction_type="epsilon"
     )
