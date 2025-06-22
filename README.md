@@ -1,5 +1,8 @@
 # PatronesApp
 
+Autor: Sandra Villca Señoranis
+Institución: Universidad Mayor, Real y Pontificia de San Francisco Xavier de Chuquisaca
+
 PatronesApp es una aplicación web basada en Flask diseñada para generar patrones de faldas utilizando modelos de difusión de aprendizaje profundo. Los usuarios pueden seleccionar diferentes tipos de faldas (por ejemplo, recta, con volantes o con bolsillos), generar patrones, y obtener variaciones de tallas (S, M, L) en formatos PNG, SVG y PDF para impresión y costura. La aplicación utiliza modelos de difusión preentrenados para crear imágenes de alta calidad e incluye procesamiento de imágenes para ajustes de tallas y vectorización para la creación de patrones.
 
 ## Características
@@ -68,48 +71,56 @@ Para ejecutar PatronesApp localmente, necesitas configurar un entorno virtual de
 ### Pasos
 
 1. **Instalar virtualenv:** Abre una terminal e instala el paquete virtualenv si no está instalado:
+
    ```bash
    pip install virtualenv
    ```
 
 2. **Descargar la Aplicación:** Clona o descarga el repositorio PatronesApp desde GitHub:
+
    ```bash
    git clone https://github.com/sandra-usfx/PatronesApp
    cd PatronesApp
    ```
 
 3. **Abrir en Visual Studio Code:** Inicia Visual Studio Code y abre la carpeta PatronesApp:
+
    ```bash
    code .
    ```
 
 4. **Crear un Entorno Virtual:** En la terminal (dentro de la raíz del proyecto), crea un entorno virtual llamado libEnv (o el nombre que prefieras):
+
    ```bash
    virtualenv libEnv
    ```
 
-5. **Activar el Entorno Virtual:** 
-   
+5. **Activar el Entorno Virtual:**
+
    En Windows, activa el entorno virtual usando PowerShell:
+
    ```powershell
    .\libEnv\Scripts\Activate.ps1
    ```
-   
+
    En macOS/Linux, usa:
+
    ```bash
    source libEnv/bin/activate
    ```
 
 6. **Instalar Dependencias:** Con el entorno virtual activado, instala todas las dependencias listadas en requirements.txt:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 7. **Ejecutar la Aplicación:** Después de instalar las dependencias, inicia la aplicación Flask:
+
    ```bash
    python run.py
    ```
-   
+
    La aplicación se iniciará en modo de depuración, y podrás acceder a ella en http://localhost:5000 desde tu navegador web.
 
 ## Uso
