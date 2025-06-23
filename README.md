@@ -1,8 +1,16 @@
 # PatronesApp
 
-Autor: Sandra Villca Señoranis
+## Información del Proyecto
 
-Institución: Universidad Mayor, Real y Pontificia de San Francisco Xavier de Chuquisaca
+- **Autor:** Sandra Villca
+- **Contacto:** sandra.usfx@gmail.com
+- **Institución:** Universidad Mayor, Real y Pontificia de San Francisco Xavier de Chuquisaca
+- **Carrera:** Ciencias de la Computación
+- **Semestre:** 7mo
+- **Materia:** Desarrollo de Aplicaciones Inteligentes
+- **Docente:** Ing. Carlos Pacheco
+
+## Descripción
 
 PatronesApp es una aplicación web basada en Flask diseñada para generar patrones de faldas utilizando modelos de difusión de aprendizaje profundo. Los usuarios pueden seleccionar diferentes tipos de faldas (por ejemplo, recta, con volantes o con bolsillos), generar patrones, y obtener variaciones de tallas (S, M, L) en formatos PNG, SVG y PDF para impresión y costura. La aplicación utiliza modelos de difusión preentrenados para crear imágenes de alta calidad e incluye procesamiento de imágenes para ajustes de tallas y vectorización para la creación de patrones.
 
@@ -151,3 +159,7 @@ La carpeta models/ contiene solo un punto de control del modelo "Patrones Varios
 ## Presentación y Artículo Científico
 
 Para mayor información sobre éste proyecto, puedes abrir los archivos Presentacion-Aplicacion.pdf y Articulo-Cientifico.pdf.
+
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
